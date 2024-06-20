@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5B910EED-9C39-40D0-B4EE-68752EBFFB1F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CashManager.Daily.Api", "src\CashManager.Daily.Api\CashManager.Daily.Api.csproj", "{D0185964-CB59-4CB4-926B-9930C7E39AEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0185964-CB59-4CB4-926B-9930C7E39AEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0185964-CB59-4CB4-926B-9930C7E39AEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0185964-CB59-4CB4-926B-9930C7E39AEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0185964-CB59-4CB4-926B-9930C7E39AEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D0185964-CB59-4CB4-926B-9930C7E39AEE} = {5B910EED-9C39-40D0-B4EE-68752EBFFB1F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {39D23E6F-F3D2-4EDD-92D4-FF3FB44A385F}
+	EndGlobalSection
+EndGlobal
