@@ -1,52 +1,77 @@
 
+using System;
+using System.Linq;
+using System.Security.AccessControl;
+using CashManager.Daily.Api.Domain.CustomerAgg;
+using CashManager.Daily.Api.Infrastructure.Mongo;
+using CashManager.Daily.Api.Repository;
+using CashManager.Daily.Api.Repository.Customer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
 namespace CashManager.Daily.Api;
 
-public class Program
+public static class Program
 {
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        var configuration = builder.Configuration;
 
         // Add services to the container.
         builder.Services.AddAuthorization();
-
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        builder.Services.AddMongo(configuration);
+        builder.Services.AddServicesApp();
+
+        builder.Services.AddControllers();
+
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
 
-        app.UseHttpsRedirection();
-
+        app.UseRouting();
+        app.UseStatusCodePages();
         app.UseAuthorization();
 
-        var summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        app.MapGet("/weatherforecast", (HttpContext httpContext) =>
-        {
-            var forecast =  Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                {
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    TemperatureC = Random.Shared.Next(-20, 55),
-                    Summary = summaries[Random.Shared.Next(summaries.Length)]
-                })
-                .ToArray();
-            return forecast;
-        })
-        .WithName("GetWeatherForecast")
-        .WithOpenApi();
-
         app.Run();
+    }
+
+}
+
+public static class ServiceExtensions
+{
+    public static IServiceCollection AddMongo(this IServiceCollection services, IConfiguration configuration)
+    {
+        var conn = configuration.GetConnectionString("Mongo");
+        var options = new MongoOptions();
+        
+        configuration.GetSection(MongoOptions.PREFIX).Bind(options);
+
+        var provider = new MongoProvider(conn, options);
+        services.AddSingleton(provider);
+
+        return services;
+    }
+
+    public static IServiceCollection AddServicesApp(this IServiceCollection services)
+    {
+        services.AddScoped(sp => 
+        {
+            var provider = sp.GetRequiredService<MongoProvider>();
+
+            return new Repository<Customer>(provider, "Customer");
+        });
+
+        return services;
     }
 }
