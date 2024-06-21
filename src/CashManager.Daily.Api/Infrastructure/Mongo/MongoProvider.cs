@@ -3,7 +3,7 @@ using MongoDB.Driver;
 
 namespace CashManager.Daily.Api.Infrastructure.Mongo
 {
-    public class MongoProvider
+    public class MongoProvider: IMongoProvider
     {
         private readonly IMongoClient _client;
         private readonly MongoOptions _options;

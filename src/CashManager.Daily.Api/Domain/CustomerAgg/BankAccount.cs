@@ -4,9 +4,6 @@ namespace CashManager.Daily.Api.Domain.CustomerAgg
 {
     public class BankAccount
     {
-        [BsonElement("Id")]
-        public string? Id { get; set; }
-
         [BsonElement("Name")]
         public string? Name { get; set; }
 
@@ -19,5 +16,8 @@ namespace CashManager.Daily.Api.Domain.CustomerAgg
         //Current, Savings
         [BsonElement("Type")]
         public string? Type { get; set; }
+
+        [BsonElement("Enabled")]
+        public bool Enabled { get; set; }
     }
 }

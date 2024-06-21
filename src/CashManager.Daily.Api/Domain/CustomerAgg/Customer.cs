@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -8,6 +9,9 @@ namespace CashManager.Daily.Api.Domain.CustomerAgg
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
+
+        [BsonElement("Document")]
+        public string? Document { get; set; }
 
         [BsonElement("Name")]
         public string? Name { get; set; }
@@ -26,6 +30,6 @@ namespace CashManager.Daily.Api.Domain.CustomerAgg
         public Company? Company { get; set; }
 
         [BsonElement("BankAccount")]
-        public BankAccount? BankAccount { get; set; }
+        public List<BankAccount>? BankAccount { get; set; }
     }
 }

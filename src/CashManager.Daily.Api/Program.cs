@@ -6,6 +6,8 @@ using CashManager.Daily.Api.Domain.CustomerAgg;
 using CashManager.Daily.Api.Infrastructure.Mongo;
 using CashManager.Daily.Api.Repository;
 using CashManager.Daily.Api.Repository.Customer;
+using CashManager.Daily.Api.Services.Abstractions;
+using CashManager.Daily.Api.Services.Implementations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +29,8 @@ public static class Program
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddMongo(configuration);
-        builder.Services.AddServicesApp();
+        builder.Services.AddRepository();
+        builder.Services.AddServiceAppServices();
 
         builder.Services.AddControllers();
 
@@ -38,11 +41,9 @@ public static class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
-        app.UseRouting();
-        app.UseStatusCodePages();
+        
         app.UseAuthorization();
-
+        app.MapControllers();
         app.Run();
     }
 
@@ -57,20 +58,29 @@ public static class ServiceExtensions
         
         configuration.GetSection(MongoOptions.PREFIX).Bind(options);
 
-        var provider = new MongoProvider(conn, options);
-        services.AddSingleton(provider);
+        services.AddSingleton<IMongoProvider>(_ => 
+        {
+            return new MongoProvider(conn, options);
+        });
 
         return services;
     }
 
-    public static IServiceCollection AddServicesApp(this IServiceCollection services)
+    public static IServiceCollection AddRepository(this IServiceCollection services)
     {
-        services.AddScoped(sp => 
+        services.AddScoped<IRepository<Customer>>(sp => 
         {
-            var provider = sp.GetRequiredService<MongoProvider>();
+            var provider = sp.GetRequiredService<IMongoProvider>();
 
-            return new Repository<Customer>(provider, "Customer");
+            return new Repository<Customer>(provider, "Customers");
         });
+
+        return services;
+    }
+
+    public static IServiceCollection AddServiceAppServices(this IServiceCollection services)
+    {
+        services.AddScoped<ICustomerAppService, CustomerAppServices>();
 
         return services;
     }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CashManager.Daily.Api.Controllers
 {
     [ApiController]
-    [Route("/api/v1/customers")]
+    [Route("api/v1/[controller]")]
     public class CustomersController: ControllerBase
     {
         private readonly ICustomerAppService _service;
@@ -16,14 +16,9 @@ namespace CashManager.Daily.Api.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok();
-        }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Customer customer)
+        public async Task<IActionResult> Post([FromBody]Customer customer)
         {
             await _service.CreateCustomer(customer);
 
