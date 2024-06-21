@@ -22,7 +22,48 @@ namespace CashManager.Daily.Api.Controllers
         {
             await _service.CreateCustomer(customer);
 
-            return Created();
+            return StatusCode(201);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await _service.DeleteCustomer(id);
+
+            return StatusCode(204);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var result = await _service.GetAll();
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetById([FromRoute]string id)
+        {
+            var result = await _service.GetById(id);
+
+            if(result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("{document}/by-document")]
+        public async Task<IActionResult> GetByName([FromRoute]string document)
+        {
+            var result = await _service.GetByDocument(document);
+
+            if(result == null)
+                return NotFound();
+
+            return Ok(result);
         }
     }
 }
