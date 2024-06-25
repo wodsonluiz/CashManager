@@ -4,13 +4,13 @@ namespace CashManager.Domain.CustomerTransactionAgg
 {
     public class Transaction
     {
-        public decimal Ammout { get; }
+        public long Amount { get; }
         public DateTime DateOperation { get; }
         public string? OperationType { get; }
 
-        public Transaction(decimal ammout, DateTime dateOperation, string operationType)
+        public Transaction(long amount, DateTime dateOperation, string operationType)
         {
-            Ammout = ammout;
+            Amount = amount;
             DateOperation = dateOperation;
             OperationType = operationType;
         }

@@ -7,6 +7,7 @@ using CashManager.Daily.Api.Models;
 using CashManager.Daily.Api.Services.Abstractions;
 using CashManager.Daily.Api.Shared;
 using CashManager.Domain.CustomerTransactionAgg;
+using CashManager.Infrastructure.RabbitMq;
 using CashManager.Infrastructure.Repository;
 
 namespace CashManager.Daily.Api.Services.Implementations
@@ -14,14 +15,19 @@ namespace CashManager.Daily.Api.Services.Implementations
     public class CustomerAppServices: ICustomerAppService
     {
         private readonly IRepository<CustomerTransaction> _repository;
+        private readonly IProducerMessageHandler _producerMessageHandler;
 
-        public CustomerAppServices(IRepository<CustomerTransaction> repository) =>
+        public CustomerAppServices(IRepository<CustomerTransaction> repository, IProducerMessageHandler producerMessageHandler)
+        {
             _repository = repository;
+            _producerMessageHandler = producerMessageHandler;
+        }
 
-        public Task CreateCustomer(CustomerTransactionRequest request)
+        public async Task CreateCustomer(CustomerTransactionRequest request)
         {
             var customer = request.MapToCustomerTransaction();
-            return _repository.Add(customer);
+            await _repository.Add(customer);
+            await _producerMessageHandler.CreateMessageInBroker(customer);
         }
 
         public async Task<IEnumerable<CustomerTransactionRequest>> GetAll()

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using CashManager.Daily.Api.Models;
 using CashManager.Domain.CustomerTransactionAgg;
 
@@ -11,7 +9,7 @@ namespace CashManager.Daily.Api.Shared
         public static CustomerTransaction MapToCustomerTransaction(this CustomerTransactionRequest request)
         {
             var company = new Company(request?.Company?.Name);
-            var transaction = new Transaction(request.Transaction.Ammout, DateTime.UtcNow, request.Transaction.OperationType);
+            var transaction = new Transaction(request.Transaction.Amount, DateTime.UtcNow, request.Transaction.OperationType);
             
             return new CustomerTransaction(request?.Id, 
                 request?.Document, 
@@ -30,13 +28,14 @@ namespace CashManager.Daily.Api.Shared
                 Name = customer.Name,
                 Profile = customer.Profile,
                 Email = customer.Email,
+                Document = customer.Document,
                 Company = new CompanyRequest
                 {
                     Name = customer.Name
                 },
                 Transaction = new TransactionRequest
                 {
-                    Ammout = customer.Transaction.Ammout,
+                    Amount = customer.Transaction.Amount,
                     OperationType = customer.Transaction.OperationType,
                     DateOperation = customer.Transaction.DateOperation
                 }
