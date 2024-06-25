@@ -1,16 +1,5 @@
-
-using System;
-using System.Linq;
-using System.Security.AccessControl;
-using CashManager.Daily.Api.Domain.CustomerAgg;
-using CashManager.Daily.Api.Infrastructure.Mongo;
-using CashManager.Daily.Api.Repository;
-using CashManager.Daily.Api.Repository.Customer;
-using CashManager.Daily.Api.Services.Abstractions;
-using CashManager.Daily.Api.Services.Implementations;
+using CashManager.Daily.Api.Shared;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -29,9 +18,10 @@ public static class Program
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddMongo(configuration);
+        builder.Services.AddRabbitMq(configuration);
         builder.Services.AddRepository();
         builder.Services.AddServiceAppServices();
-
+    
         builder.Services.AddControllers();
 
         var app = builder.Build();
@@ -45,43 +35,5 @@ public static class Program
         app.UseAuthorization();
         app.MapControllers();
         app.Run();
-    }
-
-}
-
-public static class ServiceExtensions
-{
-    public static IServiceCollection AddMongo(this IServiceCollection services, IConfiguration configuration)
-    {
-        var conn = configuration.GetConnectionString("Mongo");
-        var options = new MongoOptions();
-        
-        configuration.GetSection(MongoOptions.PREFIX).Bind(options);
-
-        services.AddSingleton<IMongoProvider>(_ => 
-        {
-            return new MongoProvider(conn, options);
-        });
-
-        return services;
-    }
-
-    public static IServiceCollection AddRepository(this IServiceCollection services)
-    {
-        services.AddScoped<IRepository<Customer>>(sp => 
-        {
-            var provider = sp.GetRequiredService<IMongoProvider>();
-
-            return new Repository<Customer>(provider, "Customers");
-        });
-
-        return services;
-    }
-
-    public static IServiceCollection AddServiceAppServices(this IServiceCollection services)
-    {
-        services.AddScoped<ICustomerAppService, CustomerAppServices>();
-
-        return services;
     }
 }
