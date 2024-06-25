@@ -1,7 +1,6 @@
 using CashManager.Daily.Api.Services.Abstractions;
 using CashManager.Daily.Api.Services.Implementations;
-using CashManager.Domain.CustomerAgg;
-using CashManager.Domain.TransactionAgg;
+using CashManager.Domain.CustomerTransactionAgg;
 using CashManager.Infrastructure.Mongo;
 using CashManager.Infrastructure.RabbitMq;
 using CashManager.Infrastructure.Repository;
@@ -30,18 +29,11 @@ namespace CashManager.Daily.Api.Shared
 
         public static IServiceCollection AddRepository(this IServiceCollection services)
         {
-            services.AddScoped<IRepository<Customer>>(sp => 
+            services.AddScoped<IRepository<CustomerTransaction>>(sp => 
             {
                 var provider = sp.GetRequiredService<IMongoProvider>();
 
-                return new Repository<Customer>(provider, "Customers");
-            });
-
-            services.AddScoped<IRepository<Transaction>>(sp =>
-            {
-                var provider = sp.GetRequiredService<IMongoProvider>();
-
-                return new Repository<Transaction>(provider, "Transactions");
+                return new Repository<CustomerTransaction>(provider, collectionName: "CustomerTransactions");
             });
 
             return services;
@@ -50,7 +42,6 @@ namespace CashManager.Daily.Api.Shared
         public static IServiceCollection AddServiceAppServices(this IServiceCollection services)
         {
             services.AddScoped<ICustomerAppService, CustomerAppServices>();
-            services.AddScoped<ITransactionAppService, TransactionAppService>();
 
             return services;
         }

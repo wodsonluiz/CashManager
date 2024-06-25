@@ -3,55 +3,60 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using CashManager.Daily.Api.Models;
 using CashManager.Daily.Api.Services.Abstractions;
-using CashManager.Domain.CustomerAgg;
+using CashManager.Daily.Api.Shared;
+using CashManager.Domain.CustomerTransactionAgg;
 using CashManager.Infrastructure.Repository;
 
 namespace CashManager.Daily.Api.Services.Implementations
 {
     public class CustomerAppServices: ICustomerAppService
     {
-        private readonly IRepository<Customer> _repository;
+        private readonly IRepository<CustomerTransaction> _repository;
 
-        public CustomerAppServices(IRepository<Customer> repository)
-        {
+        public CustomerAppServices(IRepository<CustomerTransaction> repository) =>
             _repository = repository;
-        }
 
-        public Task CreateCustomer(Customer customer)
+        public Task CreateCustomer(CustomerTransactionRequest request)
         {
-            customer.Id = Guid.NewGuid().ToString();
+            var customer = request.MapToCustomerTransaction();
             return _repository.Add(customer);
         }
 
-        public Task DeleteCustomer(string id)
+        public async Task<IEnumerable<CustomerTransactionRequest>> GetAll()
         {
-            return _repository.Delete(id);
+            var customers = await _repository.GetAll();
+            var customersRequest = new List<CustomerTransactionRequest>();
+
+            if(customers.Any())
+            {
+                foreach (var customer in customers)
+                {
+                    customersRequest.Add(customer.MapToCustomerTransactionRequest());
+                }
+            }
+
+            return customersRequest;
         }
 
-        public Task<IEnumerable<Customer>> GetAll()
+        public async Task<CustomerTransactionRequest> GetByDocument(string document)
         {
-            return _repository.GetAll();
-        }
-
-        public async Task<Customer> GetByDocument(string document)
-        {
-            if(string.IsNullOrWhiteSpace(document))
-                throw new ArgumentNullException($"Id: invalid");
-
-            Expression<Func<Customer, bool>> filter = customer => customer.Document == document;
+            Expression<Func<CustomerTransaction, bool>> filter = customer => customer.Document == document;
 
             var customers = await _repository.GetByFilter(filter);
 
-            return customers?.FirstOrDefault();
+            if(customers.Any())
+                return null;
+
+            return customers!.FirstOrDefault()!.MapToCustomerTransactionRequest();
         }
 
-        public Task<Customer> GetById(string id)
+        public async Task<CustomerTransactionRequest> GetById(string id)
         {
-            if(string.IsNullOrWhiteSpace(id))
-                throw new ArgumentNullException($"Id: invalid");
+            var customer = await _repository.GetById(id);
 
-            return _repository.GetById(id);
+            return customer?.MapToCustomerTransactionRequest()!;
         }
     }
 }

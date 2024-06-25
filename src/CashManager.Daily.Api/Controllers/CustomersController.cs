@@ -1,38 +1,31 @@
 using System.Threading.Tasks;
+using CashManager.Daily.Api.Models;
 using CashManager.Daily.Api.Services.Abstractions;
-using CashManager.Domain.CustomerAgg;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CashManager.Daily.Api.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class CustomersController: ControllerBase
+    public class CustomerTransactionsController: ControllerBase
     {
         private readonly ICustomerAppService _service;
 
-        public CustomersController(ICustomerAppService service)
+        public CustomerTransactionsController(ICustomerAppService service)
         {
             _service = service;
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]Customer customer)
+        public async Task<IActionResult> Post([FromBody]CustomerTransactionRequest customer)
         {
             await _service.CreateCustomer(customer);
 
             return StatusCode(201);
         }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task<IActionResult> Delete(string id)
-        {
-            await _service.DeleteCustomer(id);
-
-            return StatusCode(204);
-        }
+        
 
         [HttpGet]
         public async Task<IActionResult> Get()

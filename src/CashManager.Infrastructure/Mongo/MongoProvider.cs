@@ -16,6 +16,7 @@ namespace CashManager.Infrastructure.Mongo
             _options = options ?? throw new ArgumentException("conn are invalid", conn);
         }
 
-        public IMongoDatabase GetMongoDatabase() => _client.GetDatabase(_options.DatabaseName);
+        public IMongoDatabase GetMongoDatabase() => 
+            _client.GetDatabase(_options.DatabaseName);
     }
 }
