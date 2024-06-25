@@ -1,7 +1,7 @@
 using System;
 using MongoDB.Driver;
 
-namespace CashManager.Daily.Api.Infrastructure.Mongo
+namespace CashManager.Infrastructure.Mongo
 {
     public class MongoProvider: IMongoProvider
     {

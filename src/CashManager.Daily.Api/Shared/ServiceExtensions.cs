@@ -1,11 +1,10 @@
-using CashManager.Daily.Api.Domain;
-using CashManager.Daily.Api.Domain.CustomerAgg;
-using CashManager.Daily.Api.Infrastructure.Mongo;
-using CashManager.Daily.Api.Infrastructure.RabbitMq;
-using CashManager.Daily.Api.Repository;
-using CashManager.Daily.Api.Repository.Customer;
 using CashManager.Daily.Api.Services.Abstractions;
 using CashManager.Daily.Api.Services.Implementations;
+using CashManager.Domain.CustomerAgg;
+using CashManager.Domain.TransactionAgg;
+using CashManager.Infrastructure.Mongo;
+using CashManager.Infrastructure.RabbitMq;
+using CashManager.Infrastructure.Repository;
 using EasyNetQ;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

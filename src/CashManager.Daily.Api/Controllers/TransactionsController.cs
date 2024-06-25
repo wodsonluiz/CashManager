@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
-using CashManager.Daily.Api.Domain;
 using CashManager.Daily.Api.Services.Abstractions;
+using CashManager.Domain.TransactionAgg;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CashManager.Daily.Api.Controllers

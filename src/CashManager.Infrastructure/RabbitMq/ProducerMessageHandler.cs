@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using EasyNetQ;
 using EasyNetQ.Topology;
 
-namespace CashManager.Daily.Api.Infrastructure.RabbitMq
+namespace CashManager.Infrastructure.RabbitMq
 {
     public class ProducerMessageHandler: IProducerMessageHandler
     {

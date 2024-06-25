@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CashManager.Daily.Api.Domain.CustomerAgg;
+using CashManager.Domain.CustomerAgg;
 
 namespace CashManager.Daily.Api.Services.Abstractions
 {

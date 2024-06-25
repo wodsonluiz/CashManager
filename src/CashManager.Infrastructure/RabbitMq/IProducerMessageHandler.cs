@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace CashManager.Daily.Api.Infrastructure.RabbitMq
+namespace CashManager.Infrastructure.RabbitMq
 {
     public interface IProducerMessageHandler
     {

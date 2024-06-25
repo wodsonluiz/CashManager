@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using CashManager.Daily.Api.Domain.CustomerAgg;
-using CashManager.Daily.Api.Repository;
 using CashManager.Daily.Api.Services.Abstractions;
+using CashManager.Domain.CustomerAgg;
+using CashManager.Infrastructure.Repository;
 
 namespace CashManager.Daily.Api.Services.Implementations
 {
@@ -20,6 +20,7 @@ namespace CashManager.Daily.Api.Services.Implementations
 
         public Task CreateCustomer(Customer customer)
         {
+            customer.Id = Guid.NewGuid().ToString();
             return _repository.Add(customer);
         }
 

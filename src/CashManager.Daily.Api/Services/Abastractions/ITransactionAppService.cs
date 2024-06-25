@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using CashManager.Daily.Api.Domain;
+using CashManager.Domain.TransactionAgg;
 
 namespace CashManager.Daily.Api.Services.Abstractions
 {
