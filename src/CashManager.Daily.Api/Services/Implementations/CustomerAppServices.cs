@@ -4,7 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CashManager.Daily.Api.Domain.CustomerAgg;
-using CashManager.Daily.Api.Infrastructure.RabbitMq;
 using CashManager.Daily.Api.Repository;
 using CashManager.Daily.Api.Services.Abstractions;
 
@@ -13,17 +12,14 @@ namespace CashManager.Daily.Api.Services.Implementations
     public class CustomerAppServices: ICustomerAppService
     {
         private readonly IRepository<Customer> _repository;
-        private readonly IMessageHandler _messageHandler;
 
-        public CustomerAppServices(IRepository<Customer> repository, IMessageHandler messageHandler)
+        public CustomerAppServices(IRepository<Customer> repository)
         {
             _repository = repository;
-            _messageHandler = messageHandler;
         }
 
         public Task CreateCustomer(Customer customer)
         {
-            _messageHandler.CreateMessageInBroker<Customer>(customer);
             return _repository.Add(customer);
         }
 

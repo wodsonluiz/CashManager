@@ -1,4 +1,4 @@
-using System.Threading;
+using CashManager.Daily.Api.Domain;
 using CashManager.Daily.Api.Domain.CustomerAgg;
 using CashManager.Daily.Api.Infrastructure.Mongo;
 using CashManager.Daily.Api.Infrastructure.RabbitMq;
@@ -7,7 +7,6 @@ using CashManager.Daily.Api.Repository.Customer;
 using CashManager.Daily.Api.Services.Abstractions;
 using CashManager.Daily.Api.Services.Implementations;
 using EasyNetQ;
-using EasyNetQ.Topology;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -39,12 +38,20 @@ namespace CashManager.Daily.Api.Shared
                 return new Repository<Customer>(provider, "Customers");
             });
 
+            services.AddScoped<IRepository<Transaction>>(sp =>
+            {
+                var provider = sp.GetRequiredService<IMongoProvider>();
+
+                return new Repository<Transaction>(provider, "Transactions");
+            });
+
             return services;
         }
 
         public static IServiceCollection AddServiceAppServices(this IServiceCollection services)
         {
             services.AddScoped<ICustomerAppService, CustomerAppServices>();
+            services.AddScoped<ITransactionAppService, TransactionAppService>();
 
             return services;
         }
@@ -57,16 +64,9 @@ namespace CashManager.Daily.Api.Shared
 
             var bus = RabbitHutch.CreateBus(conn);
 
-            var exchange = new Exchange(options.ExchangeName, options.ExchangeType, true, false);
-            var queue = new Queue(options.QueueName, true, false, false);
-
-            bus.Advanced.ExchangeDeclare(exchange.Name, exchange.Type, exchange.IsDurable, exchange.IsAutoDelete);
-            bus.Advanced.QueueDeclare(queue.Name);
-            bus.Advanced.Bind(exchange: exchange, queue: queue, options.RoutingKey);
-
+            services.AddSingleton(options);
             services.AddSingleton(bus);
-            
-            services.AddScoped<IMessageHandler, MessageHandler>();
+            services.AddSingleton<IProducerMessageHandler, ProducerMessageHandler>();
 
             return services;
         }
