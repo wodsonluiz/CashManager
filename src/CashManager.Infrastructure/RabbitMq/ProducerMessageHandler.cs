@@ -9,7 +9,7 @@ namespace CashManager.Infrastructure.RabbitMq
         private readonly IBus _bus;
         private readonly Exchange _exchange;
 
-        public ProducerMessageHandler(IBus bus, ProducerOptions options)
+        public ProducerMessageHandler(IBus bus, RabbitMqOptions options)
         {   
             _exchange = new Exchange(options.ExchangeName, options.ExchangeType, true, false);
             _bus = bus;

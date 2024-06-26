@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CashManager.Daily.Api.Shared
 {
-    public static class ServiceExtensions
+    public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddMongo(this IServiceCollection services, IConfiguration configuration)
         {
@@ -49,8 +49,8 @@ namespace CashManager.Daily.Api.Shared
         public static IServiceCollection AddRabbitMq(this IServiceCollection services, IConfiguration configuration)
         {
             var conn = configuration.GetConnectionString("RabbitMq");
-            var options = new ProducerOptions();
-            configuration.GetSection(ProducerOptions.PREFIX).Bind(options);
+            var options = new RabbitMqOptions();
+            configuration.GetSection(RabbitMqOptions.PREFIX).Bind(options);
 
             var bus = RabbitHutch.CreateBus(conn);
 

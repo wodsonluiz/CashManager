@@ -1,6 +1,6 @@
 namespace CashManager.Infrastructure.RabbitMq
 {
-    public class ProducerOptions
+    public class RabbitMqOptions
     {
         public const string PREFIX = "RabbitMqSettings";
 
