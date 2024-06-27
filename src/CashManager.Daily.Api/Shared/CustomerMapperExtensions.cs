@@ -1,6 +1,7 @@
 using System;
 using CashManager.Daily.Api.Models;
 using CashManager.Domain.CustomerTransactionAgg;
+using CashManager.Domain.ObjectValue;
 
 namespace CashManager.Daily.Api.Shared
 {

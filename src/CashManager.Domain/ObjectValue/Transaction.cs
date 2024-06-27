@@ -1,14 +1,14 @@
 using System;
 
-namespace CashManager.Domain.CustomerTransactionAgg
+namespace CashManager.Domain.ObjectValue
 {
     public class Transaction
     {
         public long Amount { get; }
         public DateTime DateOperation { get; }
-        public string? OperationType { get; }
+        public string OperationType { get; }
 
-        public Transaction(long amount, DateTime dateOperation, string operationType)
+        public Transaction(long amount, DateTime dateOperation, string? operationType)
         {
             Amount = amount;
             DateOperation = dateOperation;

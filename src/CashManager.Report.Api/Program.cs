@@ -11,6 +11,7 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        var configuration = builder.Configuration;
 
         // Add services to the container.
         builder.Services.AddAuthorization();
@@ -18,9 +19,14 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        builder.Services.AddRabbitMq(builder.Configuration);
+
+        builder.Services.AddMongo(configuration);
+        builder.Services.AddRabbitMq(configuration);
+        builder.Services.AddRepository();
+        builder.Services.AddServiceAppServices();
 
         builder.Services.AddHostedService<Worker>();
+        builder.Services.AddControllers();
 
         var app = builder.Build();
 
@@ -31,10 +37,8 @@ public class Program
             app.UseSwaggerUI();
         }
 
-        app.UseHttpsRedirection();
-
         app.UseAuthorization();
-
+        app.MapControllers();
         app.Run();
     }
 }

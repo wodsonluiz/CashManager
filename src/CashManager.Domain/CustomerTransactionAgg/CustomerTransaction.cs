@@ -1,4 +1,5 @@
 using System;
+using CashManager.Domain.ObjectValue;
 
 namespace CashManager.Domain.CustomerTransactionAgg
 {
@@ -13,10 +14,10 @@ namespace CashManager.Domain.CustomerTransactionAgg
         public Transaction Transaction { get; }
 
         public CustomerTransaction(string? id, 
-            string? document, 
-            string? name, 
-            string? email, 
-            string? profile,
+            string document, 
+            string name, 
+            string email, 
+            string profile,
             Company company, 
             Transaction transaction)
         {
