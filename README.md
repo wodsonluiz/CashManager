@@ -1,5 +1,5 @@
 # CashManager :arrow_down: :arrow_up:
-Application to control debit and credit to customer
+Solution to control debit and credit in balance to customer
 
 - QuickStart/Required
 - Run all services with docker-compose
