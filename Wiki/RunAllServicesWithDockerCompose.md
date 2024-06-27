@@ -1,0 +1,1 @@
+## Run All services with docker compose
