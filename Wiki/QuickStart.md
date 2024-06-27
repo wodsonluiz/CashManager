@@ -1,8 +1,8 @@
-## QuickStart/ Required
+## QuickStart / Required
 
 Solution to control debit and credit in balance to customer.
 
-![CashManager](https://github.com/wodsonluiz/CashManager/assets/13908258/f7ce2311-67c8-4203-b442-141fb9dc8b8c)
+![CashManager (1)](https://github.com/wodsonluiz/CashManager/assets/13908258/85943bb4-d543-491c-a738-91657875afdc)
 
 
 #### Install docker, [link](https://docs.docker.com/engine/install/)
