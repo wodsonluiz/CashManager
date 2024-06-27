@@ -1,7 +1,7 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using CashManager.Domain.CustomerTransactionAgg;
-using CashManager.Domain.ObjectValue;
 using CashManager.Domain.ReportAgg;
 using CashManager.Infrastructure.RabbitMq;
 using CashManager.Infrastructure.Repository;
@@ -38,24 +38,35 @@ namespace CashManager.Report.Api
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _bus.Advanced.Consume<CustomerTransaction>(_queue, (message, info) => 
-            {
-                var customerBalance = message.Body;
-
-                if(customerBalance == null)
-                    return Task.CompletedTask;
-
-                var reportDaily = new ReportDaily(id: null,
-                    name: customerBalance.Name, 
-                    document: customerBalance.Document, 
-                    transaction: customerBalance.Transaction);
-
-                return _repository.Add(reportDaily);
-            });
+                HandlerMessage(message.Body, stoppingToken));
 
             while (!stoppingToken.IsCancellationRequested)
             {
                 await Task.Delay(1000, stoppingToken);
             }
+        }
+    
+        private Task HandlerMessage(CustomerTransaction customerTransaction, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if(customerTransaction == null)
+                    return Task.CompletedTask;
+
+                var reportDaily = new ReportDaily(id: null,
+                    name: customerTransaction.Name, 
+                    document: customerTransaction.Document, 
+                    transaction: customerTransaction.Transaction);
+
+                return _repository.AddAsync(reportDaily, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro in consumer message ", ex);
+                return Task.CompletedTask;
+            }
+
+            
         }
     }
 }

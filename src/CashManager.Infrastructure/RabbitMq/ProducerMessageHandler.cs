@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using EasyNetQ;
 using EasyNetQ.Topology;
@@ -21,13 +22,15 @@ namespace CashManager.Infrastructure.RabbitMq
             _bus = bus;
         }
 
-        public Task CreateMessageInBroker<T>(T entity)
+        public Task CreateMessageInBrokerAsync<T>(T entity, CancellationToken cancellationToken = default)
         {
             var message = new Message<T>(entity);
 
-            return _bus.Advanced.PublishAsync(message: message, exchange: _exchange, routingKey: _options.RoutingKey, mandatory: false);
-
-
+            return _bus.Advanced.PublishAsync(message: message, 
+                exchange: _exchange, 
+                routingKey: _options.RoutingKey, 
+                mandatory: false,
+                cancellationToken: cancellationToken);
         }
     }
 }

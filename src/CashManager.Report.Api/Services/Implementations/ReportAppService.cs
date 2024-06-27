@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using CashManager.Domain.ReportAgg;
 using CashManager.Infrastructure.Repository;
@@ -19,13 +20,13 @@ namespace CashManager.Report.Api.Services.Implementations
             _repository = repository;
         }
 
-        public async Task<ReportContentResponse> GetReportContentByDocumentAsync(string document)
+        public async Task<ReportContentResponse> GetReportContentByDocumentAsync(string document, CancellationToken cancellationToken = default)
         {
             var reportResponse = new ReportContentResponse();
 
             Expression<Func<ReportDaily, bool>> filter = report => report.Document == document;
 
-            var reports = await _repository.GetByFilter(filter);
+            var reports = await _repository.GetByFilterAsync(filter, cancellationToken);
 
             if(reports == null || !reports.Any())
                 return reportResponse;

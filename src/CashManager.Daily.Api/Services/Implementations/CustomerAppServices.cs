@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using CashManager.Daily.Api.Models;
 using CashManager.Daily.Api.Services.Abstractions;
@@ -23,16 +24,16 @@ namespace CashManager.Daily.Api.Services.Implementations
             _producerMessageHandler = producerMessageHandler;
         }
 
-        public async Task CreateCustomer(CustomerTransactionRequest request)
+        public async Task CreateCustomerAsync(CustomerTransactionRequest request, CancellationToken cancellationToken = default)
         {
             var customer = request.MapToCustomerTransaction();
-            await _repository.Add(customer);
-            await _producerMessageHandler.CreateMessageInBroker(customer);
+            await _repository.AddAsync(customer, cancellationToken);
+            await _producerMessageHandler.CreateMessageInBrokerAsync(customer, cancellationToken);
         }
 
-        public async Task<IEnumerable<CustomerTransactionRequest>> GetAll()
+        public async Task<IEnumerable<CustomerTransactionRequest>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var customers = await _repository.GetAll();
+            var customers = await _repository.GetAllAsync(cancellationToken);
             var customersRequest = new List<CustomerTransactionRequest>();
 
             if(customers.Any())
@@ -46,11 +47,11 @@ namespace CashManager.Daily.Api.Services.Implementations
             return customersRequest;
         }
 
-        public async Task<CustomerTransactionRequest> GetByDocument(string document)
+        public async Task<CustomerTransactionRequest> GetByDocumentAsync(string document, CancellationToken cancellationToken = default)
         {
             Expression<Func<CustomerTransaction, bool>> filter = customer => customer.Document == document;
 
-            var customers = await _repository.GetByFilter(filter);
+            var customers = await _repository.GetByFilterAsync(filter, cancellationToken);
 
             if(!customers.Any())
                 return null;
@@ -58,9 +59,9 @@ namespace CashManager.Daily.Api.Services.Implementations
             return customers!.FirstOrDefault()!.MapToCustomerTransactionRequest();
         }
 
-        public async Task<CustomerTransactionRequest> GetById(string id)
+        public async Task<CustomerTransactionRequest> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         {
-            var customer = await _repository.GetById(id);
+            var customer = await _repository.GetByIdAsync(id, cancellationToken);
 
             return customer?.MapToCustomerTransactionRequest()!;
         }

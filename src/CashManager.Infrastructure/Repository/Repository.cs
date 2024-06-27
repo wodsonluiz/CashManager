@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using CashManager.Infrastructure.Mongo;
 using MongoDB.Driver;
@@ -11,67 +12,34 @@ namespace CashManager.Infrastructure.Repository
     {
         private readonly IMongoCollection<BsonDocument> _collection;
         
-        public Repository(IMongoProvider mongoProvider, string collectionName)
-        {
+        public Repository(IMongoProvider mongoProvider, string collectionName) =>
             _collection = mongoProvider.GetMongoDatabase().GetCollection<BsonDocument>(collectionName);
-        }
 
-        public Task Add(BsonDocument entity)
+        public Task AddAsync(BsonDocument entity, CancellationToken cancellationToken = default) =>
+            _collection.InsertOneAsync(entity, null, cancellationToken);
+
+        public async Task<IEnumerable<BsonDocument>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return _collection.InsertOneAsync(entity);
+            var documents = await _collection.FindAsync(entity => true, cancellationToken: cancellationToken);
+            
+            return documents?.ToList();
         }
 
-        public Task Delete(string id)
-        {
-            var filter = Builders<BsonDocument>.Filter.Eq("Id", id);
-
-            return _collection.DeleteOneAsync(filter);
-        }
-
-        public async Task<IEnumerable<BsonDocument>> GetAll()
-        {
-            return await _collection.Find(entity => true).ToListAsync();
-        }
-
-        public async Task<BsonDocument> GetById(string id)
+        public async Task<BsonDocument> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         {
             var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
 
-            return await _collection.Find(filter).FirstOrDefaultAsync();
+            var documents = await _collection.FindAsync(filter, cancellationToken: cancellationToken);
+
+            return documents.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<BsonDocument>> GetByFilter(Expression<Func<BsonDocument, bool>> filter)
+        public async Task<IEnumerable<BsonDocument>> GetByFilterAsync(Expression<Func<BsonDocument, bool>> filter, 
+            CancellationToken cancellationToken = default)
         {
-            return await _collection.Find(filter).ToListAsync();
-        }
+            var documents = await _collection.FindAsync(filter, cancellationToken: cancellationToken);
 
-        public Task Update(BsonDocument entity)
-        {
-            if(TryValueObjectToString(entity!, "Id", out string id))
-            {
-                 var filter = Builders<BsonDocument>.Filter.Eq("Id", id);
-                return _collection.ReplaceOneAsync(filter, entity);
-            }
-
-            throw new ArgumentException($"Id: {id} invalid");
-        }
-
-        private static bool TryValueObjectToString(object entity, string key, out string value)
-        {
-            value = string.Empty;
-
-            if(entity == null)
-                return false;
-
-            var type = entity.GetType();
-            var property = type?.GetProperty(key);
-
-            value = property?.GetValue(entity!, null)?.ToString();
-
-            if(string.IsNullOrWhiteSpace(value))
-                return false;
-
-            return true;
+            return documents.ToList();
         }
     }
 }

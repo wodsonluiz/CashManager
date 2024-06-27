@@ -1,4 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
 using CashManager.Daily.Api.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
