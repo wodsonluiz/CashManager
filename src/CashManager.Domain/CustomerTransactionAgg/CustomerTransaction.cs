@@ -21,7 +21,7 @@ namespace CashManager.Domain.CustomerTransactionAgg
             Company company, 
             Transaction transaction)
         {
-            InvalidThrowCustomer(document, name, email, profile, company);
+            InvalidThrowCustomer(document, name, email, profile, company, transaction);
 
             Id = id ?? Guid.NewGuid().ToString();
 
@@ -33,7 +33,7 @@ namespace CashManager.Domain.CustomerTransactionAgg
             Transaction = transaction;
         }
 
-        private void InvalidThrowCustomer(string? document, string? name, string? email, string? profile, Company company)
+        private void InvalidThrowCustomer(string? document, string? name, string? email, string? profile, Company company, Transaction transaction)
         {
             if(string.IsNullOrEmpty(document))
                 throw new ArgumentException($"invalid field {nameof(document)} ");
@@ -49,6 +49,11 @@ namespace CashManager.Domain.CustomerTransactionAgg
 
             if(company == null || string.IsNullOrEmpty(company.Name))
                 throw new ArgumentException($"invalid field {nameof(company)}");
+
+            var isTransactionInvalid = transaction == null || transaction.Amount <= 0 || string.IsNullOrEmpty(transaction.OperationType);
+
+            if(isTransactionInvalid)
+                throw new ArgumentException($"invalid field {nameof(transaction)}");
         }
     }
 }

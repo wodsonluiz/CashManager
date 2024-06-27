@@ -8,7 +8,7 @@ namespace CashManager.Domain.ObjectValue
         public DateTime DateOperation { get; }
         public string OperationType { get; }
 
-        public Transaction(long amount, DateTime dateOperation, string? operationType)
+        public Transaction(long amount, DateTime dateOperation, string operationType)
         {
             Amount = amount;
             DateOperation = dateOperation;
