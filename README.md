@@ -5,7 +5,6 @@ Solution to control debit and credit in balance to customer
 - [Run all services with docker-compose](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/RunAllServicesWithDockerCompose.md)
 - [Run segragate services](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/RunSegregateServices.md)
 - [Unit tests](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/UnitTests.md)
-- [Logging](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/Logging.md)
 - [Health check](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/HealthCheck.md)
 
 #### :dizzy: If you like this project, you can a starred
