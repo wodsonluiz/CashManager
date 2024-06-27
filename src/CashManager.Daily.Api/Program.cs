@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using CashManager.Daily.Api.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,7 @@ public static class Program
         builder.Services.AddAuthorization();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddHealthChecks();
 
         builder.Services.AddMongo(configuration);
         builder.Services.AddRabbitMq(configuration);
@@ -32,6 +34,7 @@ public static class Program
             app.UseSwaggerUI();
         }
         
+        app.MapHealthChecks("/api/health");
         app.UseAuthorization();
         app.MapControllers();
         app.Run();

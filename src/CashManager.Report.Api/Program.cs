@@ -19,6 +19,7 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddHealthChecks();
 
         builder.Services.AddMongo(configuration);
         builder.Services.AddRabbitMq(configuration);
@@ -37,6 +38,7 @@ public class Program
             app.UseSwaggerUI();
         }
 
+        app.UseHealthChecks("/api/health");
         app.UseAuthorization();
         app.MapControllers();
         app.Run();
