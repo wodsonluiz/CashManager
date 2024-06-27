@@ -55,12 +55,12 @@ curl --location 'http://localhost:5079/api/v1/customertransactions' \
 curl --location 'http://localhost:5079/api/v1/customertransactions'
 ```
 
-- Get by id => Return status code with one entity
+- Get by id => Return status code 200 with one entity
 ```
 curl --location 'http://localhost:5079/api/v1/customertransactions/5d8f4624-1d72-4365-b37d-7fd0478c927a'
 ```
 
-- Get by document => Return status code with one entity
+- Get by document => Return status code 200 with one entity
 
 ```
 curl --location 'http://localhost:5079/api/v1/customertransactions/12345678910/by-document'
