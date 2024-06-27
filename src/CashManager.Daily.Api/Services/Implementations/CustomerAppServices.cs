@@ -52,7 +52,7 @@ namespace CashManager.Daily.Api.Services.Implementations
 
             var customers = await _repository.GetByFilter(filter);
 
-            if(customers.Any())
+            if(!customers.Any())
                 return null;
 
             return customers!.FirstOrDefault()!.MapToCustomerTransactionRequest();

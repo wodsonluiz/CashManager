@@ -51,6 +51,9 @@ namespace CashManager.Daily.Api.Controllers
         [Route("{document}/by-document")]
         public async Task<IActionResult> GetByName([FromRoute]string document)
         {
+            if(string.IsNullOrEmpty(document))
+                return BadRequest($"Documento invalid {document}");
+                
             var result = await _service.GetByDocument(document);
 
             if(result == null)
