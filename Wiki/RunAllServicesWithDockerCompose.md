@@ -17,6 +17,9 @@ id   rabbitmq:management-alpine   "docker-entrypoint.s…"   2 hours ago        
 id   mongo:latest                 "docker-entrypoint.s…"   2 hours ago          Up About a minute   0.0.0.0:27017->27017/tcp                                                                                      mongo
 ```
 
+<img width="1377" alt="Screenshot 2024-06-27 at 16 49 16" src="https://github.com/wodsonluiz/CashManager/assets/13908258/4834bf81-8949-4481-8f14-8b27e87eaea2">
+
+
 ### RabbitM1
 - http://localhost:15672/#/
 - Connectionstring: amqp://admin:admin123@rabbitmq:5672/Staging
