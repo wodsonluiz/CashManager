@@ -8,4 +8,6 @@ Solution to control debit and credit in balance to customer
 - [Stress tests](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/StressTest.md)
 - [Health check](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/HealthCheck.md)
 
+
 #### :dizzy: If you like this project, you can a starred
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/wodsonluiz/CashManager/dotnet.yml)
