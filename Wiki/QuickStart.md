@@ -1,6 +1,6 @@
 ## QuickStart / Required
 
-Solution to control debit and credit in balance to customer.
+Solution to control debit and credit in balance to customer. Applications written in .net8 :rocket:
 
 ![CashManager (1)](https://github.com/wodsonluiz/CashManager/assets/13908258/85943bb4-d543-491c-a738-91657875afdc)
 
