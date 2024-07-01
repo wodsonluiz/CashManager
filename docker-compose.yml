@@ -31,11 +31,23 @@ services:
     networks:
       - minha-rede
 
+  seq:
+    image: "datalust/seq"
+    container_name: seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:5341
+      - 9000:80
+    networks:
+      - minha-rede
+  
   cash-manager-daily-api:
     image: cash-manager-daily-api
     depends_on:
       - mongo
       - rabbitmq
+      - seq
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -48,6 +60,9 @@ services:
       - RabbitMqSettings__ExchangeName=cache-manager-exchange
       - RabbitMqSettings__ExchangeType=direct
       - RabbitMqSettings__RoutingKey=transactions.#
+      - LogSeq__Host=http://seq:5341/
+      - LogSeq__Env=Development
+      - LogSeq__Project=CashManager.Daily.Api
     build:
       context: .
       dockerfile: src/CashManager.Daily.Api/Dockerfile
@@ -61,6 +76,7 @@ services:
     depends_on:
       - mongo
       - rabbitmq
+      - seq
       - cash-manager-daily-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -74,6 +90,9 @@ services:
       - RabbitMqSettings__ExchangeName=cache-manager-exchange
       - RabbitMqSettings__ExchangeType=direct
       - RabbitMqSettings__RoutingKey=transactions.#
+      - LogSeq__Host=http://seq:5341/
+      - LogSeq__Env=Development
+      - LogSeq__Project=CashManager.Report.Api
     build:
       context: .
       dockerfile: src/CashManager.Report.Api/Dockerfile

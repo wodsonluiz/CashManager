@@ -20,6 +20,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddHealthChecks();
+        builder.Services.AddLog(configuration);
 
         builder.Services.AddMongo(configuration);
         builder.Services.AddRabbitMq(configuration);

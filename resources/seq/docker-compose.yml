@@ -1,0 +1,14 @@
+version: "3"
+services:
+
+  seq:
+    image: "datalust/seq"
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:5341
+      - 9000:80
+
+networks:
+  compose-network:
+    driver: bridge
