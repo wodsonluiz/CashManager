@@ -7,6 +7,7 @@ Solution to control debit and credit in balance to customer
 - [Unit tests](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/UnitTests.md)
 - [Stress tests](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/StressTest.md)
 - [Health check](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/HealthCheck.md)
+- [Logging](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/Logging.md)
 
 
 #### :dizzy: If you like this project, you can a starred
