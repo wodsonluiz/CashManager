@@ -1,26 +1,32 @@
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using CashManager.Daily.Api.Filter;
 using CashManager.Daily.Api.Models;
 using CashManager.Daily.Api.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace CashManager.Daily.Api.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
+    [LogActionFilterAttribute]
     public class CustomerTransactionsController: ControllerBase
     {
         private readonly ICustomerAppService _service;
+        private readonly ILogger _logger;
         private readonly CancellationTokenSource _cts;
 
-        public CustomerTransactionsController(ICustomerAppService service)
+        public CustomerTransactionsController(ICustomerAppService service, ILogger logger)
         {
             _service = service;
+            _logger = logger;
             _cts = new CancellationTokenSource();
         }
 
-
         [HttpPost]
+        
         public async Task<IActionResult> Post([FromBody]CustomerTransactionRequest customer)
         {
             await _service.CreateCustomerAsync(customer, _cts.Token);
@@ -29,7 +35,6 @@ namespace CashManager.Daily.Api.Controllers
         }
 
         
-
         [HttpGet]
         public async Task<IActionResult> Get()
         {

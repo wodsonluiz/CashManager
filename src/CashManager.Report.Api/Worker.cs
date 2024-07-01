@@ -8,6 +8,7 @@ using CashManager.Infrastructure.Repository;
 using EasyNetQ;
 using EasyNetQ.Topology;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace CashManager.Report.Api
 {
@@ -15,23 +16,27 @@ namespace CashManager.Report.Api
     {
         private readonly IBus _bus;
         private readonly IRepository<ReportDaily> _repository;
+        private readonly ILogger _logger;
         private readonly Queue _queue;
 
-        public Worker(IBus bus, RabbitMqOptions options, IRepository<ReportDaily> repository)
+        public Worker(IBus bus, RabbitMqOptions options, IRepository<ReportDaily> repository, ILogger logger)
         {
             _bus = bus;
             _repository = repository;
+            _logger = logger;
             _queue = bus.Advanced.QueueDeclare(options.QueueName);
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
+            _logger.Information("Worker started");
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             _bus.Dispose();
+            _logger.Information("Worker stopped");
             return base.StopAsync(cancellationToken);
         }
 
@@ -58,11 +63,13 @@ namespace CashManager.Report.Api
                     document: customerTransaction.Document, 
                     transaction: customerTransaction.Transaction);
 
+                _logger.Information($"Message Processed - Document customer: {customerTransaction.Document}");
+
                 return _repository.AddAsync(reportDaily, cancellationToken);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro in consumer message ", ex);
+                _logger.Error($"Erro in consumer message ", ex);
                 return Task.CompletedTask;
             }
 

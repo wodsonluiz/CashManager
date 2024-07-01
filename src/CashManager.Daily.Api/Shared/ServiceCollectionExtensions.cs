@@ -7,6 +7,7 @@ using CashManager.Infrastructure.Repository;
 using EasyNetQ;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace CashManager.Daily.Api.Shared
 {
@@ -57,6 +58,24 @@ namespace CashManager.Daily.Api.Shared
             services.AddSingleton(options);
             services.AddSingleton(bus);
             services.AddSingleton<IProducerMessageHandler, ProducerMessageHandler>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddLog(this IServiceCollection services, IConfiguration configuration)
+        {
+            var project = configuration.GetSection("LogSeq").GetSection("Project").Value;
+            var url = configuration.GetSection("LogSeq").GetSection("Host").Value;
+            var env = configuration.GetSection("LogSeq").GetSection("Env").Value;
+
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.WithProperty("Project", project)
+                .Enrich.WithProperty("Environment", env)
+                .Enrich.FromLogContext()
+                .WriteTo.Seq(url!, Serilog.Events.LogEventLevel.Information)
+                .CreateLogger();
+
+            services.AddSingleton(Log.Logger);
 
             return services;
         }
