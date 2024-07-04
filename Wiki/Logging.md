@@ -1,14 +1,13 @@
 ## Logging
 
-Logs writting in Seq with Serilog
+Logs escritos no Seq com o uso do Serilog.
 
-Access
-http://localhost:9000/#/events?range=1d
+Acesso: http://localhost:9000/#/events?range=1d
 
-### Querys for application
+### Querys por aplicativo
 
 #### CashManager.Daily.Api
-Logging in all actions POST/GET to controller
+É logado todas as actions POST/GET da controller.
 
 ```
 Project = 'CashManager.Daily.Api'
@@ -17,7 +16,7 @@ Project = 'CashManager.Daily.Api'
 
 #### CashManager.Report.Api
 
-Loggin in processing event or error
+É logado o processamento de consumo dos eventos e eventuais erros.
 
 ```
 Project = 'CashManager.Report.Api'
