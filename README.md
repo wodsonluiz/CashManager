@@ -1,6 +1,9 @@
 # CashManager :arrow_down: :arrow_up:
 Solução para cotronle de débitos e creditação no saldo do cliente.
 
+
+![CashManager (1)](https://github.com/wodsonluiz/CashManager/assets/13908258/85943bb4-d543-491c-a738-91657875afdc)
+
 - [Início/ Requisitos](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/QuickStart.md)
 - [Executar todos os serviços e recursos](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/RunAllServicesWithDockerCompose.md)
 - [Executar cada aplicativo e recurso](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/RunSegregateServices.md)
@@ -8,6 +11,7 @@ Solução para cotronle de débitos e creditação no saldo do cliente.
 - [Testes de estresse](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/StressTest.md)
 - [Health check](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/HealthCheck.md)
 - [Log dos aplicativos](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/Logging.md)
+
 
 
 ### O Projeto
@@ -48,7 +52,7 @@ Na classe `CustomerTransaction` do código fornecido, podemos identificar vário
 O projeto pode ser executado de duas maneiras. Em ambas, será necessária a instalação do Docker para prover os recursos de banco de dados e mensageria.
 
 1.	Executar os aplicativos e recursos via Docker Compose. [Link para as instruções](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/RunAllServicesWithDockerCompose.md)
-2.	Executar cada aplicativo de forma segregada. Nesse caso, será necessário também executar o Docker Compose para cada recurso, disponível na pasta resources. [Link para as instruções](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/RunAllServicesWithDockerCompose.md)
+2.	Executar cada aplicativo de forma segregada. Nesse caso, será necessário também executar o Docker Compose para cada recurso, disponível na pasta resources. [Link para as instruções]([https://github.com/wodsonluiz/CashManager/blob/main/Wiki/RunAllServicesWithDockerCompose.md](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/RunSegregateServices.md)
 
 ## Observalibilidade
 Optei por escrever logs nos fluxos críticos. **Um aplicativo precisa ter um nível mínimo de observabilidade para permitir a detecção, diagnóstico e resolução rápida de problemas, garantindo desempenho, disponibilidade e confiabilidade**. Além dos logs, há endpoints de health checks disponíveis. [Link das instruções](https://github.com/wodsonluiz/CashManager/blob/main/Wiki/Logging.md)
