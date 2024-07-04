@@ -1,7 +1,7 @@
-## Unit tests
+## Testes de unidade
 
 ### CashManager.Domain.Test
-Build and run unit tests on [Github Actions](https://github.com/wodsonluiz/CashManager/actions)
+O build e a execução dos testes de unidade estão disponibilizadas no [Github Actions](https://github.com/wodsonluiz/CashManager/actions)
 
 
 ```
