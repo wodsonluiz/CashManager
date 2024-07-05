@@ -7,7 +7,7 @@ namespace CashManager.Infrastructure.Mongo
     {
         private readonly IMongoClient _client;
         private readonly MongoOptions _options;
-        public MongoProvider(string? conn, MongoOptions options)
+        public MongoProvider(string conn, MongoOptions options)
         {
             if(string.IsNullOrWhiteSpace(conn))
                 throw new ArgumentException("conn are invalid", conn);

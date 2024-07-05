@@ -4,6 +4,6 @@ namespace CashManager.Infrastructure.Mongo
     {
         public const string PREFIX = "MongoSettings";
 
-        public string? DatabaseName { get; set; }
+        public string DatabaseName { get; set; }
     }
 }
