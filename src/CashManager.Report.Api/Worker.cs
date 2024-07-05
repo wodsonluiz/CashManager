@@ -53,26 +53,25 @@ namespace CashManager.Report.Api
     
         private Task HandlerMessage(CustomerTransaction customerTransaction, CancellationToken cancellationToken = default)
         {
+            if(customerTransaction == null)
+                return Task.CompletedTask;
+
             try
             {
-                if(customerTransaction == null)
-                    return Task.CompletedTask;
-
                 var reportDaily = new ReportDaily(id: null,
                     name: customerTransaction.Name, 
                     document: customerTransaction.Document, 
                     transaction: customerTransaction.Transaction);
 
-                _logger.Information($"Message Processed - Document customer: {customerTransaction.Document}");
+                _logger.Information("Message Processed - Document customer: {0}", customerTransaction.Document);
 
                 return _repository.AddAsync(reportDaily, cancellationToken);
             }
             catch (Exception ex)
             {
-                _logger.Error($"Erro in consumer message ", ex);
+                _logger.Error(ex, "Erro in consumer message ");
                 return Task.CompletedTask;
             }
-
             
         }
     }
