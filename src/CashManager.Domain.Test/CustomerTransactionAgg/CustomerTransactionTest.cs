@@ -23,7 +23,7 @@ namespace CashManager.Domain.Test.CustomerTransactionAgg
             var transaction = Builder<Transaction>.New.Create();
             
             //act
-            Action action = () => new CustomerTransaction(null, null, NAME, EMAIL, PROFILE, company, transaction);
+            Action action = () => new CustomerTransaction(null, string.Empty, NAME, EMAIL, PROFILE, company, transaction);
 
             //assert
             action.Should().Throw<ArgumentException>();
@@ -37,7 +37,7 @@ namespace CashManager.Domain.Test.CustomerTransactionAgg
             var transaction = Builder<Transaction>.New.Create();
             
             //act
-            Action action = () => new CustomerTransaction(null, DOCUMENT, null, EMAIL, PROFILE, company, transaction);
+            Action action = () => new CustomerTransaction(null, DOCUMENT, string.Empty, EMAIL, PROFILE, company, transaction);
 
             //assert
             action.Should().Throw<ArgumentException>();
@@ -51,7 +51,7 @@ namespace CashManager.Domain.Test.CustomerTransactionAgg
             var transaction = Builder<Transaction>.New.Create();
             
             //act
-            Action action = () => new CustomerTransaction(null, DOCUMENT, NAME, null, PROFILE, company, transaction);
+            Action action = () => new CustomerTransaction(null, DOCUMENT, NAME, string.Empty, PROFILE, company, transaction);
 
             //assert
             action.Should().Throw<ArgumentException>();
@@ -65,7 +65,7 @@ namespace CashManager.Domain.Test.CustomerTransactionAgg
             var transaction = Builder<Transaction>.New.Create();
             
             //act
-            Action action = () => new CustomerTransaction(null, DOCUMENT, NAME, EMAIL, null, company, transaction);
+            Action action = () => new CustomerTransaction(null, DOCUMENT, NAME, EMAIL, string.Empty, company, transaction);
 
             //assert
             action.Should().Throw<ArgumentException>();
