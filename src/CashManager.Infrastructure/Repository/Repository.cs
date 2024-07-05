@@ -25,7 +25,7 @@ namespace CashManager.Infrastructure.Repository
             return documents?.ToList();
         }
 
-        public async Task<BsonDocument> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<BsonDocument?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         {
             var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
 
