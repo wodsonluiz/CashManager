@@ -6,6 +6,6 @@ namespace CashManager.Report.Api.Models
     {
         public long Amount { get; set; }
         public DateTime DateOperation { get; set; }
-        public string? OperationType { get; set; }
+        public string OperationType { get; set; }
     }
 }

@@ -10,6 +10,7 @@ using CashManager.Daily.Api.Shared;
 using CashManager.Domain.CustomerTransactionAgg;
 using CashManager.Infrastructure.RabbitMq;
 using CashManager.Infrastructure.Repository;
+using Serilog;
 
 namespace CashManager.Daily.Api.Services.Implementations
 {
@@ -17,31 +18,49 @@ namespace CashManager.Daily.Api.Services.Implementations
     {
         private readonly IRepository<CustomerTransaction> _repository;
         private readonly IProducerMessageHandler _producerMessageHandler;
+        private readonly ILogger _logger;
 
-        public CustomerAppServices(IRepository<CustomerTransaction> repository, IProducerMessageHandler producerMessageHandler)
+        public CustomerAppServices(IRepository<CustomerTransaction> repository, 
+            IProducerMessageHandler producerMessageHandler, ILogger logger)
         {
             _repository = repository;
             _producerMessageHandler = producerMessageHandler;
+            _logger = logger;
         }
 
         public async Task CreateCustomerAsync(CustomerTransactionRequest request, CancellationToken cancellationToken = default)
         {
-            var customer = request.MapToCustomerTransaction();
-            await _repository.AddAsync(customer, cancellationToken);
-            await _producerMessageHandler.CreateMessageInBrokerAsync(customer, cancellationToken);
+            try
+            {
+                var customer = request.MapToCustomerTransaction();
+                await _repository.AddAsync(customer, cancellationToken);
+                await _producerMessageHandler.CreateMessageInBrokerAsync(customer, cancellationToken);
+            }
+            catch (System.Exception ex)
+            {
+                _logger.Error(ex, $"Erro in {nameof(CreateCustomerAsync)}");
+            }
         }
 
         public async Task<IEnumerable<CustomerTransactionRequest>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var customers = await _repository.GetAllAsync(cancellationToken);
             var customersRequest = new List<CustomerTransactionRequest>();
 
-            if(customers.Any())
+            try
             {
-                foreach (var customer in customers)
+                var customers = await _repository.GetAllAsync(cancellationToken);
+
+                if(customers.Any())
                 {
-                    customersRequest.Add(customer.MapToCustomerTransactionRequest());
+                    foreach (var customer in customers)
+                    {
+                        customersRequest.Add(customer.MapToCustomerTransactionRequest());
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Erro in {nameof(GetAllAsync)}");
             }
 
             return customersRequest;
@@ -49,21 +68,40 @@ namespace CashManager.Daily.Api.Services.Implementations
 
         public async Task<CustomerTransactionRequest> GetByDocumentAsync(string document, CancellationToken cancellationToken = default)
         {
-            Expression<Func<CustomerTransaction, bool>> filter = customer => customer.Document == document;
+            CustomerTransactionRequest customer = null;
 
-            var customers = await _repository.GetByFilterAsync(filter, cancellationToken);
+            try
+            {
+                Expression<Func<CustomerTransaction, bool>> filter = customer => customer.Document == document;
 
-            if(!customers.Any())
-                return null;
+                var customers = await _repository.GetByFilterAsync(filter, cancellationToken);
 
-            return customers!.FirstOrDefault()!.MapToCustomerTransactionRequest();
+                customer = customers?.FirstOrDefault()!.MapToCustomerTransactionRequest();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Erro in {nameof(GetByDocumentAsync)}");
+            }
+
+            return customer;
         }
 
         public async Task<CustomerTransactionRequest> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         {
-            var customer = await _repository.GetByIdAsync(id, cancellationToken);
+            CustomerTransactionRequest customer = null;
 
-            return customer?.MapToCustomerTransactionRequest()!;
+            try
+            {
+                var customerResult = await _repository.GetByIdAsync(id, cancellationToken);
+
+                customer = customerResult?.MapToCustomerTransactionRequest()!;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Erro in {nameof(GetByIdAsync)}");
+            }
+
+            return customer;
         }
     }
 }
